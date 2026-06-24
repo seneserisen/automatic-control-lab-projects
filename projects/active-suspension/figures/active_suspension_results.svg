@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" role="img">
+<rect width="100%" height="100%" fill="white"/>
+<text x="450.0" y="28" text-anchor="middle" font-family="Arial" font-size="22" font-weight="bold">Quarter-car body acceleration</text>
+<rect x="75" y="55" width="795" height="380" fill="none" stroke="#333"/>
+<line x1="75.0" y1="55" x2="75.0" y2="435" stroke="#ddd"/>
+<line x1="75" y1="55.0" x2="870" y2="55.0" stroke="#ddd"/>
+<text x="75.0" y="457" text-anchor="middle" font-family="Arial" font-size="12">0</text>
+<text x="65" y="59.0" text-anchor="end" font-family="Arial" font-size="12">6.5</text>
+<line x1="234.0" y1="55" x2="234.0" y2="435" stroke="#ddd"/>
+<line x1="75" y1="131.0" x2="870" y2="131.0" stroke="#ddd"/>
+<text x="234.0" y="457" text-anchor="middle" font-family="Arial" font-size="12">0.58</text>
+<text x="65" y="135.0" text-anchor="end" font-family="Arial" font-size="12">3.5</text>
+<line x1="393.0" y1="55" x2="393.0" y2="435" stroke="#ddd"/>
+<line x1="75" y1="207.0" x2="870" y2="207.0" stroke="#ddd"/>
+<text x="393.0" y="457" text-anchor="middle" font-family="Arial" font-size="12">1.2</text>
+<text x="65" y="211.0" text-anchor="end" font-family="Arial" font-size="12">0.42</text>
+<line x1="552.0" y1="55" x2="552.0" y2="435" stroke="#ddd"/>
+<line x1="75" y1="283.0" x2="870" y2="283.0" stroke="#ddd"/>
+<text x="552.0" y="457" text-anchor="middle" font-family="Arial" font-size="12">1.7</text>
+<text x="65" y="287.0" text-anchor="end" font-family="Arial" font-size="12">-2.6</text>
+<line x1="711.0" y1="55" x2="711.0" y2="435" stroke="#ddd"/>
+<line x1="75" y1="359.0" x2="870" y2="359.0" stroke="#ddd"/>
+<text x="711.0" y="457" text-anchor="middle" font-family="Arial" font-size="12">2.3</text>
+<text x="65" y="363.0" text-anchor="end" font-family="Arial" font-size="12">-5.7</text>
+<line x1="870.0" y1="55" x2="870.0" y2="435" stroke="#ddd"/>
+<line x1="75" y1="435.0" x2="870" y2="435.0" stroke="#ddd"/>
+<text x="870.0" y="457" text-anchor="middle" font-family="Arial" font-size="12">2.9</text>
+<text x="65" y="439.0" text-anchor="end" font-family="Arial" font-size="12">-8.7</text>
+<polyline points="75.0,217.5 108.1,217.5 141.2,217.5 174.4,217.5 207.5,217.5 240.6,154.1 273.8,408.8 306.9,81.2 340.0,200.3 373.1,341.6 406.2,157.5 439.4,163.8 472.5,294.9 505.6,209.4 538.8,165.4 571.9,255.6 605.0,232.5 638.1,180.2 671.2,229.4 704.4,237.7 737.5,196.3 770.6,215.7 803.8,234.3 836.9,208.5 870.0,210.7" fill="none" stroke="#c23b22" stroke-width="2.2"/>
+<polyline points="75.0,217.5 108.1,217.5 141.2,217.5 174.4,217.5 207.5,217.5 240.6,170.2 273.8,365.1 306.9,124.9 340.0,219.9 373.1,263.8 406.2,197.7 439.4,206.2 472.5,231.1 505.6,216.4 538.8,212.0 571.9,220.4 605.0,218.6 638.1,215.7 671.2,217.8 704.4,218.1 737.5,217.1 770.6,217.4 803.8,217.7 836.9,217.4 870.0,217.4" fill="none" stroke="#2a6fbb" stroke-width="2.2"/>
+<text x="450.0" y="486" text-anchor="middle" font-family="Arial" font-size="14">Time [s]</text>
+<text x="18" y="250.0" text-anchor="middle" transform="rotate(-90 18 250.0)" font-family="Arial" font-size="14">Acceleration [m/s²]</text>
+<line x1="90" y1="75" x2="118" y2="75" stroke="#c23b22" stroke-width="3"/>
+<text x="126" y="79" font-family="Arial" font-size="13">Passive</text>
+<line x1="90" y1="97" x2="118" y2="97" stroke="#2a6fbb" stroke-width="3"/>
+<text x="126" y="101" font-family="Arial" font-size="13">Active</text>
+</svg>

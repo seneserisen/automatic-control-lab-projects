@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" role="img">
+<rect width="100%" height="100%" fill="white"/>
+<text x="450.0" y="28" text-anchor="middle" font-family="Arial" font-size="22" font-weight="bold">Rotary-arm reference tracking</text>
+<rect x="75" y="55" width="795" height="380" fill="none" stroke="#333"/>
+<line x1="75.0" y1="55" x2="75.0" y2="435" stroke="#ddd"/>
+<line x1="75" y1="55.0" x2="870" y2="55.0" stroke="#ddd"/>
+<text x="75.0" y="457" text-anchor="middle" font-family="Arial" font-size="12">0</text>
+<text x="65" y="59.0" text-anchor="end" font-family="Arial" font-size="12">1.1</text>
+<line x1="234.0" y1="55" x2="234.0" y2="435" stroke="#ddd"/>
+<line x1="75" y1="131.0" x2="870" y2="131.0" stroke="#ddd"/>
+<text x="234.0" y="457" text-anchor="middle" font-family="Arial" font-size="12">0.97</text>
+<text x="65" y="135.0" text-anchor="end" font-family="Arial" font-size="12">0.85</text>
+<line x1="393.0" y1="55" x2="393.0" y2="435" stroke="#ddd"/>
+<line x1="75" y1="207.0" x2="870" y2="207.0" stroke="#ddd"/>
+<text x="393.0" y="457" text-anchor="middle" font-family="Arial" font-size="12">1.9</text>
+<text x="65" y="211.0" text-anchor="end" font-family="Arial" font-size="12">0.62</text>
+<line x1="552.0" y1="55" x2="552.0" y2="435" stroke="#ddd"/>
+<line x1="75" y1="283.0" x2="870" y2="283.0" stroke="#ddd"/>
+<text x="552.0" y="457" text-anchor="middle" font-family="Arial" font-size="12">2.9</text>
+<text x="65" y="287.0" text-anchor="end" font-family="Arial" font-size="12">0.38</text>
+<line x1="711.0" y1="55" x2="711.0" y2="435" stroke="#ddd"/>
+<line x1="75" y1="359.0" x2="870" y2="359.0" stroke="#ddd"/>
+<text x="711.0" y="457" text-anchor="middle" font-family="Arial" font-size="12">3.9</text>
+<text x="65" y="363.0" text-anchor="end" font-family="Arial" font-size="12">0.15</text>
+<line x1="870.0" y1="55" x2="870.0" y2="435" stroke="#ddd"/>
+<line x1="75" y1="435.0" x2="870" y2="435.0" stroke="#ddd"/>
+<text x="870.0" y="457" text-anchor="middle" font-family="Arial" font-size="12">4.8</text>
+<text x="65" y="439.0" text-anchor="end" font-family="Arial" font-size="12">-0.08</text>
+<polyline points="75.0,408.8 108.1,407.9 141.2,402.3 174.4,389.3 207.5,367.9 240.6,338.4 273.8,302.5 306.9,262.6 340.0,221.4 373.1,181.9 406.2,146.8 439.4,118.5 472.5,98.3 505.6,86.5 538.8,81.8 571.9,81.3 605.0,81.3 638.1,81.3 671.2,81.3 704.4,81.3 737.5,81.3 770.6,81.3 803.8,81.3 836.9,81.3 870.0,81.3" fill="none" stroke="#c23b22" stroke-width="2.2"/>
+<polyline points="75.0,408.8 108.1,407.9 141.2,402.4 174.4,389.4 207.5,368.0 240.6,338.5 273.8,302.6 306.9,262.6 340.0,221.4 373.1,181.8 406.2,146.7 439.4,118.4 472.5,98.2 505.6,86.4 538.8,81.7 571.9,81.2 605.0,81.2 638.1,81.2 671.2,81.2 704.4,81.3 737.5,81.3 770.6,81.3 803.8,81.3 836.9,81.3 870.0,81.3" fill="none" stroke="#2a6fbb" stroke-width="2.2"/>
+<text x="450.0" y="486" text-anchor="middle" font-family="Arial" font-size="14">Time [s]</text>
+<text x="18" y="250.0" text-anchor="middle" transform="rotate(-90 18 250.0)" font-family="Arial" font-size="14">Angle [rad]</text>
+<line x1="90" y1="75" x2="118" y2="75" stroke="#c23b22" stroke-width="3"/>
+<text x="126" y="79" font-family="Arial" font-size="13">Reference</text>
+<line x1="90" y1="97" x2="118" y2="97" stroke="#2a6fbb" stroke-width="3"/>
+<text x="126" y="101" font-family="Arial" font-size="13">Response</text>
+</svg>

@@ -18,7 +18,7 @@ The projects reconstruct the main engineering ideas from a four-person **Automat
 
 | Active suspension | Magnetic levitation | Two-tank anti-windup |
 |---|---|---|
-| ![Active suspension](projects/active-suspension/figures/active_suspension_results.png) | ![Magnetic levitation](projects/magnetic-levitation/figures/magnetic_levitation_results.png) | ![Two-tank](projects/two-tank-system/figures/two_tank_results.png) |
+| ![Active suspension](projects/active-suspension/figures/active_suspension_results.svg) | ![Magnetic levitation](projects/magnetic-levitation/figures/magnetic_levitation_results.svg) | ![Two-tank](projects/two-tank-system/figures/two_tank_results.svg) |
 
 ## Technical coverage
 

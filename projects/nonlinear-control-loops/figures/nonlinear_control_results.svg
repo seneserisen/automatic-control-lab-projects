@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500">
+<rect width="100%" height="100%" fill="white"/>
+<text x="450.0" y="30" text-anchor="middle" font-family="Arial" font-size="22" font-weight="bold">Local stability comparison</text>
+<line x1="75" y1="210.7" x2="870" y2="210.7" stroke="#333"/>
+<rect x="142.5" y="210.7" width="130" height="44.9" fill="#2a6fbb"/>
+<text x="207.5" y="455" text-anchor="middle" font-family="Arial" font-size="13">Stable equilibrium</text>
+<text x="207.5" y="273.6" text-anchor="middle" font-family="Arial" font-size="14">-0.50</text>
+<rect x="407.5" y="99.9" width="130" height="110.9" fill="#c23b22"/>
+<text x="472.5" y="455" text-anchor="middle" font-family="Arial" font-size="13">Unstable equilibrium</text>
+<text x="472.5" y="91.9" text-anchor="middle" font-family="Arial" font-size="14">1.24</text>
+<rect x="672.5" y="210.7" width="130" height="179.4" fill="#2b9348"/>
+<text x="737.5" y="455" text-anchor="middle" font-family="Arial" font-size="13">Closed loop</text>
+<text x="737.5" y="408.1" text-anchor="middle" font-family="Arial" font-size="14">-2.00</text>
+<text x="20" y="250.0" text-anchor="middle" transform="rotate(-90 20 250.0)" font-family="Arial" font-size="14">Maximum pole real part [1/s]</text>
+</svg>

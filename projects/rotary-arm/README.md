@@ -1,19 +1,34 @@
 # Elastically Mounted Rotary Arm
 
-This reconstruction focuses on smooth point-to-point motion and the division of responsibility between feedforward and feedback control.
+This experiment compares feedback-only tracking with a two-degree-of-freedom design that combines model-based feedforward and feedback disturbance rejection.
 
-## What the script does
+## Plant model
 
-- models a simplified third-order arm plant;
-- calculates a fifth-order reference trajectory with zero initial/final velocity and acceleration;
-- derives the feedforward input from the model and trajectory derivatives;
-- adds stabilising state feedback;
-- applies an actuator limit;
-- plots the plant frequency response without requiring Control System Toolbox.
+\[
+y^{(3)}+a_2\ddot{y}+a_1\dot{y}=b u
+\]
+
+with `a1=6`, `a2=2` and `b=1`.
+
+## Experiment workflow
+
+1. generate a fifth-order point-to-point trajectory;
+2. calculate velocity, acceleration and jerk references;
+3. derive the inverse-model feedforward command;
+4. simulate feedback-only and 2-DOF controllers using RK4;
+5. inject a load disturbance after the motion is complete;
+6. compare tracking RMSE and control limits.
+
+## Reproducible results
+
+- Feedback-only tracking RMSE: approximately `0.012797 rad`
+- 2-DOF tracking RMSE: approximately `0.003787 rad`
+- RMSE improvement: approximately `70.4%`
+- Peak 2-DOF control magnitude: approximately `4.401`, below the limit of `25`
 
 ## Why fifth order?
 
-A fifth-order polynomial supplies six coefficients, enough to enforce position, velocity and acceleration boundary conditions at the beginning and end of the move.
+A fifth-order polynomial has six coefficients, allowing position, velocity and acceleration constraints at both ends of the move.
 
 ## Run
 
@@ -21,9 +36,13 @@ A fifth-order polynomial supplies six coefficients, enough to enforce position, 
 rotary_arm_demo
 ```
 
-## Engineering interpretation
+## Assumptions and limitations
 
-Feedforward creates the nominal motion required by the model. Feedback corrects modelling error and disturbances. Increasing the transition time reduces peak velocity, acceleration, jerk and feedforward effort.
+- the plant parameters are exact in the feedforward model;
+- full position, velocity and acceleration states are available;
+- Coulomb friction and backlash are omitted;
+- actuator dynamics are represented only by a magnitude limit;
+- the load disturbance is an equivalent input disturbance.
 
 ## Preview
 

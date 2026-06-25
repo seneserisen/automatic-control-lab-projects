@@ -1,29 +1,12 @@
 # Portable C Control Runtime
 
-This directory contains deployment-oriented C implementations derived from the validated MATLAB control designs.
+A portable C99 implementation of the magnetic-levitation observer and controller.
 
-## Why C is included
+## Features
 
-MATLAB is the modelling, analysis, and controller-design environment. Python is an independent numerical reference used for reproducible regression tests. C is the portable implementation layer closest to embedded deployment.
-
-The three layers have different responsibilities:
-
-| Layer | Primary purpose |
-|---|---|
-| MATLAB | Model derivation, controller and observer design, engineering plots, direct numerical tests |
-| Python | Independent reference implementation, generated evidence, multi-version regression checks |
-| C | Deterministic runtime structure, fixed memory use, strict compiler checks, embedded-oriented implementation |
-
-Python is therefore not a substitute for C. It remains useful because an independent implementation can detect errors that are repeated when code is translated directly from MATLAB.
-
-## Current implementation
-
-The magnetic-levitation observer runtime includes:
-
-- C99 source code;
 - no dynamic allocation;
 - fixed-size state and output vectors;
-- nonlinear plant equations;
+- nonlinear magnetic-levitation plant;
 - precomputed state-feedback and observer gains;
 - fixed-step RK4 integration;
 - 0–30 V actuator saturation;
@@ -41,7 +24,7 @@ ctest --test-dir build/c --output-on-failure
 ./build/c/maglev_observer_demo
 ```
 
-The CI workflow compiles the same code with both GCC and Clang using:
+CI compiles the runtime with GCC and Clang using:
 
 ```text
 -Wall -Wextra -Wpedantic -Werror
@@ -49,20 +32,29 @@ The CI workflow compiles the same code with both GCC and Clang using:
 
 ## Reference results
 
-The C runtime uses the same physical parameters, controller gains, observer gains, sample time, reference, noise magnitudes, and voltage limits as the MATLAB experiment. The random-number generator is intentionally C-specific, so individual noise samples are not expected to match MATLAB or NumPy exactly.
+| Metric | Result |
+|---|---:|
+| Final position | 0.501224 mm |
+| Observer tracking RMSE | 0.190917 mm |
+| Position-estimation RMSE | 0.000594 mm |
+| Velocity-estimation RMSE | 0.00003607 m/s |
+| Current-estimation RMSE | 0.00009038 A |
+| Maximum voltage | 22.8311 V |
 
-Representative C results with seed 42:
+## Tests
 
-- final position: approximately 0.501224 mm;
-- observer tracking RMSE: approximately 0.190917 mm;
-- position-estimation RMSE: approximately 0.000594 mm;
-- maximum voltage: approximately 22.8311 V.
+CTest verifies:
 
-The acceptance tests compare physical and numerical requirements rather than demanding bitwise equality across unrelated random-number generators.
+- invalid configuration rejection;
+- noise-free reference tracking;
+- actuator-voltage limits;
+- deterministic seeded execution;
+- fixed-step convergence;
+- bounded tracking and estimation metrics.
 
-## Not yet production-ready
+## Limitations
 
-This implementation does not yet include:
+The runtime does not yet include:
 
 - a real-time scheduler;
 - ADC or PWM drivers;
@@ -71,6 +63,6 @@ This implementation does not yet include:
 - watchdog and emergency shutdown logic;
 - MISRA-C analysis;
 - hardware-in-the-loop validation;
-- generated code equivalence evidence.
+- generated-code equivalence evidence.
 
-It is an embedded-oriented portfolio implementation, not certified controller firmware.
+This is an embedded-oriented reference implementation, not certified controller firmware.

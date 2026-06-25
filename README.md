@@ -1,8 +1,9 @@
 # Automatic Control Laboratory Projects
 
 [![Validate control portfolio](https://github.com/seneserisen/automatic-control-lab-projects/actions/workflows/validate.yml/badge.svg)](https://github.com/seneserisen/automatic-control-lab-projects/actions/workflows/validate.yml)
+[![Validate MATLAB experiments](https://github.com/seneserisen/automatic-control-lab-projects/actions/workflows/matlab.yml/badge.svg)](https://github.com/seneserisen/automatic-control-lab-projects/actions/workflows/matlab.yml)
 
-A curated control-engineering portfolio with five reproducible MATLAB experiments and a licence-free Python validation layer.
+A curated control-engineering portfolio with five reproducible MATLAB experiments, direct MATLAB unit tests, and an independent Python validation layer.
 
 The repository reconstructs the main engineering ideas from a four-person **Automatic Control I** laboratory portfolio at FAU Erlangen-Nürnberg. The public code was rebuilt from first principles rather than copied from raw team submissions or university material.
 
@@ -12,11 +13,12 @@ The objective is not to present five isolated scripts. It is to demonstrate a co
 
 1. define the physical or nonlinear model;
 2. identify an operating point or state-space representation;
-3. analyse stability and controllability;
-4. design a controller;
-5. simulate disturbances and actuator limits;
+3. analyse stability, controllability and observability;
+4. design a controller or state observer;
+5. simulate disturbances, noise and actuator limits;
 6. calculate repeatable performance metrics;
-7. document what the model can and cannot prove.
+7. test requirements in MATLAB and Python;
+8. document what the model can and cannot prove.
 
 ## Projects
 
@@ -25,10 +27,10 @@ The objective is not to present five isolated scripts. It is to demonstrate a co
 | [Nonlinear control loops](projects/nonlinear-control-loops/) | Jacobian linearisation, equilibrium stability, controllability, local state feedback | Linearisation error increases away from the operating point |
 | [Elastically mounted rotary arm](projects/rotary-arm/) | Fifth-order trajectory, feedback, feedforward, 2-DOF control, load disturbance | 2-DOF tracking RMSE is about 70% lower |
 | [Quarter-car active suspension](projects/active-suspension/) | State-space modelling, LQR, road disturbance, actuator saturation | RMS body acceleration is reduced by about 35% |
-| [Magnetic levitation](projects/magnetic-levitation/) | Nonlinear equilibrium, linearisation, pole placement, nonlinear validation | Linear/nonlinear gap RMSE is below 0.001 mm |
+| [Magnetic levitation](projects/magnetic-levitation/) | Nonlinear plant, pole placement, Luenberger observer, sensor noise, convergence study | Position-estimation RMSE is below 0.001 mm |
 | [Two-tank process](projects/two-tank-system/) | Nonlinear hydraulics, PI control, saturation, anti-windup | Recovery improves from about 429 s to 312 s |
 
-Detailed values are generated from the reference simulations and committed in [docs/results-summary.md](docs/results-summary.md).
+Detailed values are generated from executable reference models and committed in [docs/results-summary.md](docs/results-summary.md).
 
 ## Preview results
 
@@ -39,29 +41,31 @@ Detailed values are generated from the reference simulations and committed in [d
 ## Repository architecture
 
 ```text
-projects/                  MATLAB experiments and project explanations
-matlab/+control_lab/       Shared RK4, saturation, RMS and recovery utilities
-validation/                Python reference models and generated metrics
-tests/                     Numerical and physical-behaviour tests
-docs/                      Architecture, assumptions, results and validation notes
-.github/workflows/         Python 3.10–3.12 linting and test matrix
+projects/                  MATLAB experiments and project-specific functions
+matlab/+control_lab/       Shared RK4, saturation, tracking and recovery utilities
+matlab/tests/              Direct matlab.unittest verification
+validation/                Independent Python reference models and generated metrics
+tests/                     Python numerical and physical-behaviour tests
+docs/                      Architecture, results, traceability and validation notes
+.github/workflows/         Python and MATLAB CI workflows
 ```
 
-See [docs/architecture.md](docs/architecture.md) for the design rationale.
+See [docs/architecture.md](docs/architecture.md) and [docs/verification-matrix.md](docs/verification-matrix.md).
 
 ## Technical coverage
 
 - Nonlinear differential-equation modelling
 - Operating-point and Jacobian linearisation
-- State-space modelling and controllability
+- State-space modelling, controllability and observability
 - Pole and eigenvalue analysis
-- Frequency-response reasoning
+- Luenberger state observers and output-feedback control
+- Deterministic sensor-noise injection
 - P, PI, state-feedback, pole-placement and LQR concepts
 - Smooth reference trajectories and two-degree-of-freedom control
 - Disturbance rejection
 - Actuator saturation and back-calculation anti-windup
-- Fourth-order Runge-Kutta simulation
-- Reproducible performance metrics and CI
+- Fourth-order Runge-Kutta simulation and step-size convergence
+- Reproducible performance metrics and dual-runtime CI
 
 ## Quick start
 
@@ -73,19 +77,27 @@ From the repository root:
 run_all
 ```
 
-Or run one project:
+Run the modular observer experiment:
 
 ```matlab
 run('projects/magnetic-levitation/magnetic_levitation_demo.m')
 ```
 
+Run MATLAB tests locally:
+
+```matlab
+results = runtests('matlab/tests', 'IncludeSubfolders', true);
+assertSuccess(results);
+```
+
 Recommended environment:
 
-- MATLAB R2021b or later
+- MATLAB R2021b or later for local runs
+- CI uses MATLAB R2024b
 - Control System Toolbox is optional; verified fallback gains are included
 - No `.slx` files are required for the clean-room demonstrations
 
-Complete [docs/manual-validation-checklist.md](docs/manual-validation-checklist.md) before describing the repository as MATLAB-validated.
+Automated tests verify the shared utilities and modular magnetic-levitation observer. Complete [docs/manual-validation-checklist.md](docs/manual-validation-checklist.md) for full figure and demonstration review.
 
 ### Python validation
 
@@ -109,15 +121,17 @@ python -m validation.report
 
 ## Validation strategy
 
-The MATLAB scripts are the main portfolio experiments. The Python layer independently mirrors the equations to provide:
+The MATLAB functions are the main portfolio implementations. MATLAB CI executes `matlab.unittest` directly in a real MATLAB runtime.
 
-- licence-free CI on standard GitHub runners;
-- numerical regression tests;
+The Python layer independently mirrors the equations to provide:
+
+- multi-version regression checks;
 - deterministic result figures;
-- checks for stability, actuator limits and physically meaningful scenarios;
-- a generated results report that CI verifies is current.
+- physical and numerical assertions;
+- generated-results freshness checks;
+- an independent implementation of the observer and convergence study.
 
-This does not replace MATLAB execution. It provides a second implementation that makes the published claims auditable.
+Using both runtimes reduces the risk that one implementation contains an undetected modelling or syntax error.
 
 ## Limitations
 
@@ -125,8 +139,8 @@ These are educational models, not production controllers. They do not establish:
 
 - hardware-in-the-loop performance;
 - real-time timing guarantees;
-- sensor or actuator reliability;
-- robust stability across uncertain plant parameters;
+- certified sensor or actuator reliability;
+- robust stability across untested parameter ranges;
 - functional-safety compliance;
 - equivalence to the original team submission.
 

@@ -18,18 +18,6 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: pip
       - run: pip install -r requirements.txt
-      - name: Capture Ruff auto-fix diff
-        shell: bash
-        run: |
-          ruff check --fix . > ruff-report.txt 2>&1 || true
-          git diff -- validation/report.py validation/maglev_observer.py > ruff-fix.diff
-      - name: Upload Ruff diagnostics
-        uses: actions/upload-artifact@v4
-        with:
-          name: ruff-fix-${{ matrix.python-version }}
-          path: |
-            ruff-report.txt
-            ruff-fix.diff
       - run: ruff check .
       - run: ruff format --check .
       - run: pytest -q

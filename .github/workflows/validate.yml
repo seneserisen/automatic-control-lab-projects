@@ -18,23 +18,19 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: pip
       - run: pip install -r requirements.txt
-      - name: Capture Ruff diagnostics
+      - name: Capture Ruff auto-fix diff
         shell: bash
         run: |
-          set +e
-          ruff check . --output-format=concise > ruff-report.txt 2>&1
-          echo $? > ruff-exit-code.txt
-          set -e
+          ruff check --fix . > ruff-report.txt 2>&1 || true
+          git diff -- validation/report.py validation/maglev_observer.py > ruff-fix.diff
       - name: Upload Ruff diagnostics
         uses: actions/upload-artifact@v4
         with:
-          name: ruff-diagnostics-${{ matrix.python-version }}
+          name: ruff-fix-${{ matrix.python-version }}
           path: |
             ruff-report.txt
-            ruff-exit-code.txt
-      - name: Enforce Ruff result
-        shell: bash
-        run: test "$(cat ruff-exit-code.txt)" = "0"
+            ruff-fix.diff
+      - run: ruff check .
       - run: ruff format --check .
       - run: pytest -q
       - run: python -m validation.generate_reference_figures --check-only

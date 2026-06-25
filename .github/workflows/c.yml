@@ -1,0 +1,30 @@
+name: Validate C control runtime
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  c-runtime:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [gcc, clang]
+    env:
+      CC: ${{ matrix.compiler }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Configure CMake
+        run: cmake -S c -B build/c -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build with strict warnings
+        run: cmake --build build/c --parallel
+
+      - name: Run CTest
+        run: ctest --test-dir build/c --output-on-failure
+
+      - name: Run reference demo
+        run: ./build/c/maglev_observer_demo

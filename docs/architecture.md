@@ -2,13 +2,20 @@
 
 ## Design goals
 
-The repository separates five concerns:
+The repository separates six concerns:
 
 1. **Engineering experiments** — MATLAB demonstrations that explain modelling and control decisions.
 2. **Reusable numerical utilities** — shared MATLAB functions for integration, saturation, tracking metrics and recovery metrics.
 3. **Modular experiment functions** — configuration, plant model, controller design, simulation, metrics and plotting can be tested independently.
-4. **Independent reference validation** — Python models implement the same equations for licence-free regression checks.
-5. **Published evidence** — generated SVG figures, quantitative results and requirements-to-test traceability.
+4. **Independent reference validation** — Python models implement the same equations for regression checks and generated evidence.
+5. **Deployment-oriented runtime code** — portable C implementations express selected control algorithms using fixed-size memory and deterministic cyclic execution.
+6. **Published evidence** — generated figures, quantitative results, source-document reconstruction notes and requirements-to-test traceability.
+
+## Source-document transformation
+
+The uploaded reports, MATLAB scripts, Simulink models, preparation questions, experiment instructions and result discussions are treated as engineering source specifications.
+
+They are transformed into original public artifacts rather than uploaded unchanged. The transformation policy is documented in `docs/source-reconstruction-map.md`.
 
 ## MATLAB experiment layer
 
@@ -68,9 +75,29 @@ The nonlinear plant is controlled using the estimated local-deviation state. A s
 
 `validation/numerics.py` contains reusable numerical utilities. `validation/report.py` generates `docs/results-summary.md`. CI fails when the committed report no longer matches the executable reference models.
 
-## Dual-runtime continuous integration
+Python is deliberately independent from the MATLAB implementation. That independence helps detect repeated modelling or implementation mistakes.
 
-Two workflows are used:
+## Portable C runtime layer
+
+The `c/` directory contains deployment-oriented implementations for algorithms that would plausibly run cyclically on an embedded controller.
+
+The magnetic-levitation C runtime contains:
+
+- public C99 configuration and metrics API;
+- nonlinear plant equations;
+- precomputed controller and observer gains;
+- fixed-step RK4 integration;
+- deterministic sensor-noise support;
+- voltage saturation;
+- online metrics;
+- no dynamic allocation;
+- CMake and CTest configuration.
+
+C is not used for every laboratory document automatically. It is added when deterministic execution, reusable control logic, embedded deployment, or hardware-in-the-loop validation provides clear engineering value.
+
+## Three-language continuous integration
+
+Three workflows are used:
 
 ### Python validation
 
@@ -87,7 +114,26 @@ Two workflows are used:
 - JUnit test-result artifact
 - Shared utilities and magnetic-levitation observer functions on the MATLAB path
 
-The direct MATLAB workflow closes the previous gap where MATLAB syntax and runtime behaviour were only inferred from the independent Python models.
+### C runtime validation
+
+- GCC and Clang matrix
+- C99 without compiler extensions
+- `-Wall -Wextra -Wpedantic -Werror`
+- CMake build
+- CTest runtime checks
+- Reference demo execution
+
+The three implementations have different roles:
+
+- MATLAB proves the design and MATLAB runtime behaviour;
+- Python provides an independent numerical oracle and automation layer;
+- C demonstrates a deterministic deployment-oriented structure.
+
+## Cross-language comparison policy
+
+Noise-free scenarios share numerical tolerances such as reference tracking, voltage limits and step-size convergence.
+
+Noisy trajectories are not required to be bitwise-identical because MATLAB, NumPy and the C runtime use different random-number generators. They must satisfy the same physical and performance requirements.
 
 ## Test boundaries
 
@@ -99,14 +145,16 @@ Automated tests verify:
 - active-suspension acceleration reduction;
 - nonlinear magnetic-levitation tracking and voltage limits;
 - noisy observer-based state estimation;
-- deterministic seeded sensor noise;
+- deterministic seeded execution within each implementation;
 - fixed-step convergence;
+- portable C configuration validation;
+- GCC and Clang warning-free compilation;
 - physical reachability of the two-tank reference;
 - anti-windup recovery improvement;
 - RK4 accuracy and input validation;
 - sustained recovery-time and tracking-metric logic.
 
-The tests do not establish hardware safety, timing determinism on an embedded target, or robustness outside the committed parameter ranges.
+The tests do not establish hardware safety, real-time schedulability, fixed-point correctness, MISRA-C compliance, or robustness outside the committed parameter ranges.
 
 ## Numerical integration decision
 
@@ -115,8 +163,9 @@ Classical fourth-order Runge-Kutta is used for fixed-step simulations. RK4 reduc
 ## Reproducibility
 
 - Plant parameters, controller gains and observer gains are visible in code.
-- Sensor noise is deterministic through a committed seed.
+- Sensor noise is deterministic within each implementation through a committed seed.
 - Convergence studies disable noise to isolate integration error.
 - Actuator limits are explicit.
 - Published metrics are generated rather than typed manually.
 - Requirements are linked to automated tests in `docs/verification-matrix.md`.
+- Historical source material is mapped to public artifacts in `docs/source-reconstruction-map.md`.

@@ -36,7 +36,7 @@ Detailed values are generated from executable reference models and committed in 
 
 | Active suspension | Magnetic levitation | Two-tank anti-windup |
 |---|---|---|
-| ![Active suspension](projects/active-suspension/figures/active_suspension_results.svg) | ![Magnetic levitation](projects/magnetic-levitation/figures/magnetic_levitation_results.svg) | ![Two-tank](projects/two-tank-system/figures/two_tank_results.svg) |
+| ![Active suspension](projects/active-suspension/figures/active_suspension_results.svg) | ![Magnetic levitation](projects/magnetic-levitation/figures/magnetic_levitation_observer_results.svg) | ![Two-tank](projects/two-tank-system/figures/two_tank_results.svg) |
 
 ## Repository architecture
 

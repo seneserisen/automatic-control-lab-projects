@@ -2,60 +2,121 @@
 
 ## Design goals
 
-The repository separates four concerns:
+The repository separates five concerns:
 
-1. **Engineering experiments** — readable MATLAB scripts showing the modelling and control workflow.
-2. **Reusable numerical utilities** — shared MATLAB functions for integration, saturation and metrics.
-3. **Independent validation** — Python models implementing the same equations for automated checks.
-4. **Published evidence** — generated SVG figures and a version-controlled metrics report.
+1. **Engineering experiments** — MATLAB demonstrations that explain modelling and control decisions.
+2. **Reusable numerical utilities** — shared MATLAB functions for integration, saturation, tracking metrics and recovery metrics.
+3. **Modular experiment functions** — configuration, plant model, controller design, simulation, metrics and plotting can be tested independently.
+4. **Independent reference validation** — Python models implement the same equations for licence-free regression checks.
+5. **Published evidence** — generated SVG figures, quantitative results and requirements-to-test traceability.
 
 ## MATLAB experiment layer
 
 Each folder in `projects/` contains:
 
 - a self-contained project README;
-- one executable demonstration script;
+- one executable demonstration entry point;
+- project functions where deeper testing is valuable;
 - generated figures.
 
-The scripts call utilities in the `control_lab` MATLAB package:
+The magnetic-levitation project is the first fully modular experiment:
+
+```text
+maglev_configuration.m
+maglev_linear_model.m
+design_maglev_observer.m
+maglev_nonlinear_dynamics.m
+simulate_maglev_observer.m
+calculate_maglev_observer_metrics.m
+maglev_convergence_study.m
+plot_maglev_observer_results.m
+magnetic_levitation_demo.m
+```
+
+The demo coordinates the workflow; the functions contain the testable engineering logic.
+
+## Shared MATLAB package
+
+The `control_lab` package provides:
 
 - `control_lab.rk4_step`
 - `control_lab.rms_value`
 - `control_lab.saturate`
 - `control_lab.sustained_entry_time`
+- `control_lab.tracking_metrics`
 
-This avoids duplicating numerical integration and metric logic across experiments.
+This avoids duplicating integration and metric code across experiments.
+
+## Output-feedback observer architecture
+
+The magnetic-levitation controller measures gap and coil current. Ball velocity is estimated with a Luenberger observer:
+
+```text
+reference ──► state-feedback controller ──► voltage saturation ──► nonlinear plant
+                    ▲                                                │
+                    │                                                ▼
+                    └──────── estimated state ◄── observer ◄── gap/current sensors
+```
+
+The nonlinear plant is controlled using the estimated local-deviation state. A separate full-state nonlinear simulation provides a comparison baseline.
 
 ## Python validation layer
 
-`validation/reference_models.py` contains deterministic implementations of the five experiments. The Python models are not intended to replace MATLAB. They exist so the repository can be checked on a licence-free CI runner.
+`validation/reference_models.py` contains deterministic implementations of the five original experiment comparisons.
 
-`validation/numerics.py` contains reusable numerical and metric functions. `validation/report.py` generates `docs/results-summary.md` from the current models. CI fails when the committed report no longer matches the code.
+`validation/maglev_observer.py` contains the output-feedback observer experiment and fixed-step convergence study.
+
+`validation/numerics.py` contains reusable numerical utilities. `validation/report.py` generates `docs/results-summary.md`. CI fails when the committed report no longer matches the executable reference models.
+
+## Dual-runtime continuous integration
+
+Two workflows are used:
+
+### Python validation
+
+- Ruff lint and formatting checks
+- Python 3.10, 3.11 and 3.12
+- Numerical and physical-behaviour tests
+- Generated-results freshness checks
+
+### MATLAB validation
+
+- Fixed MATLAB R2024b runtime
+- Direct `matlab.unittest` execution
+- Strict warning handling
+- JUnit test-result artifact
+- Shared utilities and magnetic-levitation observer functions on the MATLAB path
+
+The direct MATLAB workflow closes the previous gap where MATLAB syntax and runtime behaviour were only inferred from the independent Python models.
 
 ## Test boundaries
 
-The automated tests verify:
+Automated tests verify:
 
-- equilibrium stability and controllability;
+- equilibrium stability, controllability and observability;
 - local linearisation accuracy;
 - 2-DOF tracking improvement;
 - active-suspension acceleration reduction;
 - nonlinear magnetic-levitation tracking and voltage limits;
+- noisy observer-based state estimation;
+- deterministic seeded sensor noise;
+- fixed-step convergence;
 - physical reachability of the two-tank reference;
 - anti-windup recovery improvement;
 - RK4 accuracy and input validation;
-- sustained recovery-time logic.
+- sustained recovery-time and tracking-metric logic.
 
-The tests do not verify MATLAB syntax or MATLAB-specific plotting. That remains part of the manual validation checklist.
+The tests do not establish hardware safety, timing determinism on an embedded target, or robustness outside the committed parameter ranges.
 
 ## Numerical integration decision
 
-Forward Euler was replaced with classical fourth-order Runge-Kutta for the fixed-step simulations. RK4 reduces integration error substantially without hiding the state equations behind a black-box solver. The nonlinear control-loop experiment still uses `ode45` because its main purpose is comparison with MATLAB's standard adaptive integration workflow.
+Classical fourth-order Runge-Kutta is used for fixed-step simulations. RK4 reduces integration error substantially without hiding the state equations behind a black-box solver. The magnetic-levitation observer includes a no-noise step-size study so the selected 0.1 ms step is supported by measured convergence evidence.
 
 ## Reproducibility
 
-- No random inputs are used.
-- All plant parameters and controller gains are visible in code.
+- Plant parameters, controller gains and observer gains are visible in code.
+- Sensor noise is deterministic through a committed seed.
+- Convergence studies disable noise to isolate integration error.
 - Actuator limits are explicit.
 - Published metrics are generated rather than typed manually.
-- CI runs on Python 3.10, 3.11 and 3.12.
+- Requirements are linked to automated tests in `docs/verification-matrix.md`.

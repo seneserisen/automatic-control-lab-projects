@@ -5,6 +5,11 @@ from __future__ import annotations
 import argparse
 
 import numpy as np
+
+from validation.maglev_observer import (
+    maglev_observer_convergence,
+    magnetic_levitation_observer_simulation,
+)
 from validation.reference_models import (
     active_suspension_simulation,
     magnetic_levitation_simulation,
@@ -12,11 +17,6 @@ from validation.reference_models import (
     repository_root,
     rotary_arm_simulation,
     two_tank_simulation,
-)
-
-from validation.maglev_observer import (
-    maglev_observer_convergence,
-    magnetic_levitation_observer_simulation,
 )
 
 

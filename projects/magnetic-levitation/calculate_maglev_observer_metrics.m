@@ -20,8 +20,7 @@ metrics.current_estimation_rmse = control_lab.rms_value( ...
     result.estimation_error(3,:));
 metrics.maximum_voltage = max(result.observer_voltage);
 metrics.minimum_voltage = min(result.observer_voltage);
-metrics.observability_rank = rank([design.observer_gain, ...
-    design.observer_gain*0+0]); %#ok<NASGU>
+metrics.observability_rank = design.observability_rank;
 metrics.controller_poles = design.controller_poles;
 metrics.observer_poles = design.observer_poles;
 end

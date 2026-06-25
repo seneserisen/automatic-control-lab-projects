@@ -62,9 +62,7 @@ def maglev_design() -> MaglevDesign:
     """Build the local model and deterministic controller/observer design."""
     mass, gravity, gap, magnetic_coefficient = 0.068, 9.81, 0.014, 6.53e-5
     resistance, inductance = 11.0, 0.4125
-    equilibrium_current = np.sqrt(
-        2.0 * mass * gravity * gap**2 / magnetic_coefficient
-    )
+    equilibrium_current = np.sqrt(2.0 * mass * gravity * gap**2 / magnetic_coefficient)
     equilibrium_voltage = resistance * equilibrium_current
     a = np.array(
         [
@@ -80,13 +78,9 @@ def maglev_design() -> MaglevDesign:
     )
     b = np.array([[0.0], [0.0], [1.0 / inductance]], dtype=float)
     c = np.array([[1.0, 0.0, 0.0], [0.0, 0.0, 1.0]], dtype=float)
-    controller_gain = np.array(
-        [[-6316.60910998, -168.35876027, 26.125]], dtype=float
-    )
+    controller_gain = np.array([[-6316.60910998, -168.35876027, 26.125]], dtype=float)
     prefilter = -1009.79192166
-    observer_gain = place_poles(
-        a.T, c.T, np.array([-80.0, -90.0, -100.0])
-    ).gain_matrix.T
+    observer_gain = place_poles(a.T, c.T, np.array([-80.0, -90.0, -100.0])).gain_matrix.T
     observability = np.vstack((c, c @ a, c @ a @ a))
     return MaglevDesign(
         a=a,
@@ -142,9 +136,7 @@ def magnetic_levitation_observer_simulation(
     def plant_rhs(state: FloatArray, voltage: float) -> FloatArray:
         actual_gap = max(float(state[0]), 0.004)
         actual_current = max(float(state[2]), 0.0)
-        magnetic_force = (
-            magnetic_coefficient * actual_current**2 / (2.0 * actual_gap**2)
-        )
+        magnetic_force = magnetic_coefficient * actual_current**2 / (2.0 * actual_gap**2)
         return np.array(
             [
                 state[1],
@@ -158,27 +150,20 @@ def magnetic_levitation_observer_simulation(
         measured[:, index] = design.c @ true_deviation + measurement_noise[:, index]
         voltage_deviation = float(
             (
-                -design.controller_gain @ estimate[:, index]
-                + design.prefilter * reference[index]
+                -design.controller_gain @ estimate[:, index] + design.prefilter * reference[index]
             ).item()
         )
-        observer_voltage[index] = np.clip(
-            design.equilibrium_voltage + voltage_deviation, 0.0, 30.0
-        )
+        observer_voltage[index] = np.clip(design.equilibrium_voltage + voltage_deviation, 0.0, 30.0)
         applied_deviation = observer_voltage[index] - design.equilibrium_voltage
 
         observer_plant[:, index + 1] = rk4_step(
-            lambda _time, state, voltage=float(observer_voltage[index]): plant_rhs(
-                state, voltage
-            ),
+            lambda _time, state, voltage=float(observer_voltage[index]): plant_rhs(state, voltage),
             time[index],
             observer_plant[:, index],
             dt,
         )
         estimate[:, index + 1] = rk4_step(
-            lambda _time, state, voltage=float(applied_deviation), output=measured[
-                :, index
-            ]: (
+            lambda _time, state, voltage=float(applied_deviation), output=measured[:, index]: (
                 design.a @ state
                 + design.b[:, 0] * voltage
                 + design.observer_gain @ (output - design.c @ state)
@@ -190,14 +175,9 @@ def magnetic_levitation_observer_simulation(
 
         full_deviation = full_state_plant[:, index] - design.equilibrium_state
         full_voltage_deviation = float(
-            (
-                -design.controller_gain @ full_deviation
-                + design.prefilter * reference[index]
-            ).item()
+            (-design.controller_gain @ full_deviation + design.prefilter * reference[index]).item()
         )
-        full_voltage = np.clip(
-            design.equilibrium_voltage + full_voltage_deviation, 0.0, 30.0
-        )
+        full_voltage = np.clip(design.equilibrium_voltage + full_voltage_deviation, 0.0, 30.0)
         full_state_plant[:, index + 1] = rk4_step(
             lambda _time, state, voltage=float(full_voltage): plant_rhs(state, voltage),
             time[index],

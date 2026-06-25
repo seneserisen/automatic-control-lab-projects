@@ -1,0 +1,35 @@
+name: Validate MATLAB experiments
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  matlab-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up MATLAB
+        uses: matlab-actions/setup-matlab@v3
+        with:
+          release: R2024b
+          cache: true
+
+      - name: Run MATLAB tests
+        uses: matlab-actions/run-tests@v3
+        with:
+          source-folder: matlab;projects/magnetic-levitation
+          select-by-folder: matlab/tests
+          strict: true
+          output-detail: detailed
+          test-results-junit: matlab-test-results/results.xml
+
+      - name: Upload MATLAB test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: matlab-test-results
+          path: matlab-test-results/results.xml
+          if-no-files-found: error

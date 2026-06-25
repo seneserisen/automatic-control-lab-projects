@@ -32,7 +32,7 @@ The two-degree-of-freedom design combines model-based feedforward with feedback 
 
 The result quantifies ride-comfort improvement while exposing the required actuator effort.
 
-## Magnetic levitation
+## Magnetic levitation: local-model validation
 
 - Equilibrium current: `2.0011 A`
 - Equilibrium voltage: `22.0124 V`
@@ -42,6 +42,23 @@ The result quantifies ride-comfort improvement while exposing the required actua
 - Maximum applied voltage: `22.7985 V`
 
 The nonlinear comparison verifies that the local controller remains accurate for the selected 0.5 mm reference step.
+
+## Magnetic levitation: output-feedback observer
+
+- Measured states: gap and coil current
+- Estimated state: ball velocity
+- Observability rank: `3`
+- Observer maximum pole real part: `-80.0000 1/s`
+- Full-state tracking RMSE: `0.191583 mm`
+- Observer-based tracking RMSE: `0.189870 mm`
+- Position-estimation RMSE: `0.000649 mm`
+- Velocity-estimation RMSE: `0.00003398 m/s`
+- Current-estimation RMSE: `0.00010277 A`
+- Maximum observer-control voltage: `22.8253 V`
+- 0.1 ms versus 0.05 ms final-position difference: `0.000004 mm`
+- 0.1 ms versus 0.05 ms maximum-voltage difference: `0.000057 V`
+
+The observer uses deterministic measurement noise with seed 42. The convergence study disables noise so integration-step effects are not confused with different random samples.
 
 ## Two-tank process
 

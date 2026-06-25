@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" role="img">
+<rect width="100%" height="100%" fill="white"/>
+<text x="450.0" y="28" text-anchor="middle" font-family="Arial" font-size="22" font-weight="bold">Magnetic-levitation observer tracking</text>
+<rect x="75" y="55" width="795" height="380" fill="none" stroke="#333"/>
+<line x1="75.0" y1="55" x2="75.0" y2="435" stroke="#ddd"/>
+<line x1="75" y1="55.0" x2="870" y2="55.0" stroke="#ddd"/>
+<text x="75.0" y="457" text-anchor="middle" font-family="Arial" font-size="12">0</text>
+<text x="65" y="59.0" text-anchor="end" font-family="Arial" font-size="12">0.54</text>
+<line x1="234.0" y1="55" x2="234.0" y2="435" stroke="#ddd"/>
+<line x1="75" y1="131.0" x2="870" y2="131.0" stroke="#ddd"/>
+<text x="234.0" y="457" text-anchor="middle" font-family="Arial" font-size="12">0.1</text>
+<text x="65" y="135.0" text-anchor="end" font-family="Arial" font-size="12">0.42</text>
+<line x1="393.0" y1="55" x2="393.0" y2="435" stroke="#ddd"/>
+<line x1="75" y1="207.0" x2="870" y2="207.0" stroke="#ddd"/>
+<text x="393.0" y="457" text-anchor="middle" font-family="Arial" font-size="12">0.2</text>
+<text x="65" y="211.0" text-anchor="end" font-family="Arial" font-size="12">0.31</text>
+<line x1="552.0" y1="55" x2="552.0" y2="435" stroke="#ddd"/>
+<line x1="75" y1="283.0" x2="870" y2="283.0" stroke="#ddd"/>
+<text x="552.0" y="457" text-anchor="middle" font-family="Arial" font-size="12">0.3</text>
+<text x="65" y="287.0" text-anchor="end" font-family="Arial" font-size="12">0.19</text>
+<line x1="711.0" y1="55" x2="711.0" y2="435" stroke="#ddd"/>
+<line x1="75" y1="359.0" x2="870" y2="359.0" stroke="#ddd"/>
+<text x="711.0" y="457" text-anchor="middle" font-family="Arial" font-size="12">0.4</text>
+<text x="65" y="363.0" text-anchor="end" font-family="Arial" font-size="12">0.076</text>
+<line x1="870.0" y1="55" x2="870.0" y2="435" stroke="#ddd"/>
+<line x1="75" y1="435.0" x2="870" y2="435.0" stroke="#ddd"/>
+<text x="870.0" y="457" text-anchor="middle" font-family="Arial" font-size="12">0.5</text>
+<text x="65" y="439.0" text-anchor="end" font-family="Arial" font-size="12">-0.04</text>
+<polyline points="75.0,408.8 95.4,408.8 115.8,408.8 136.2,408.8 156.5,81.2 176.9,81.2 197.3,81.2 217.7,81.2 238.1,81.2 258.5,81.2 278.8,81.2 299.2,81.2 319.6,81.2 340.0,81.2 360.4,81.2 380.8,81.2 401.2,81.2 421.5,81.2 441.9,81.2 462.3,81.2 482.7,81.2 503.1,81.2 523.5,81.2 543.8,81.2 564.2,81.2 584.6,81.2 605.0,81.2 625.4,81.2 645.8,81.2 666.2,81.2 686.5,81.2 706.9,81.2 727.3,81.2 747.7,81.2 768.1,81.2 788.5,81.2 808.8,81.2 829.2,81.2 849.6,81.2 870.0,81.2" fill="none" stroke="#444444" stroke-width="2.2"/>
+<polyline points="75.0,408.8 95.4,408.8 115.8,408.8 136.2,408.8 156.5,408.8 176.9,407.2 197.3,398.1 217.7,381.0 238.1,358.1 258.5,332.2 278.8,305.5 299.2,279.6 319.6,255.4 340.0,233.2 360.4,213.1 380.8,194.9 401.2,178.8 421.5,164.5 441.9,152.0 462.3,141.2 482.7,131.9 503.1,124.1 523.5,117.5 543.8,112.1 564.2,107.5 584.6,103.7 605.0,100.6 625.4,98.0 645.8,95.8 666.2,94.0 686.5,92.5 706.9,91.2 727.3,90.1 747.7,89.2 768.1,88.4 788.5,87.7 808.8,87.1 829.2,86.6 849.6,86.2 870.0,85.8" fill="none" stroke="#c23b22" stroke-width="2.2"/>
+<polyline points="75.0,408.8 95.4,408.8 115.8,408.8 136.2,408.8 156.5,408.8 176.9,407.3 197.3,398.4 217.7,381.6 238.1,359.0 258.5,333.4 278.8,306.9 299.2,281.2 319.6,257.1 340.0,234.9 360.4,214.7 380.8,196.4 401.2,180.1 421.5,165.5 441.9,152.7 462.3,141.6 482.7,132.0 503.1,123.9 523.5,117.1 543.8,111.5 564.2,106.9 584.6,103.0 605.0,99.9 625.4,97.4 645.8,95.4 666.2,93.8 686.5,92.5 706.9,91.5 727.3,90.6 747.7,89.9 768.1,89.3 788.5,88.8 808.8,88.4 829.2,88.0 849.6,87.7 870.0,87.4" fill="none" stroke="#2a6fbb" stroke-width="2.2"/>
+<text x="450.0" y="486" text-anchor="middle" font-family="Arial" font-size="14">Time [s]</text>
+<text x="18" y="250.0" text-anchor="middle" transform="rotate(-90 18 250.0)" font-family="Arial" font-size="14">Gap deviation [mm]</text>
+<line x1="90" y1="75" x2="118" y2="75" stroke="#444444" stroke-width="3"/>
+<text x="126" y="79" font-family="Arial" font-size="13">Reference</text>
+<line x1="90" y1="97" x2="118" y2="97" stroke="#c23b22" stroke-width="3"/>
+<text x="126" y="101" font-family="Arial" font-size="13">Full-state</text>
+<line x1="90" y1="119" x2="118" y2="119" stroke="#2a6fbb" stroke-width="3"/>
+<text x="126" y="123" font-family="Arial" font-size="13">Observer</text>
+</svg>

@@ -6,6 +6,10 @@ import argparse
 
 import numpy as np
 
+from validation.maglev_observer import (
+    maglev_observer_convergence,
+    magnetic_levitation_observer_simulation,
+)
 from validation.reference_models import (
     active_suspension_simulation,
     magnetic_levitation_simulation,
@@ -21,12 +25,16 @@ def render_report() -> str:
     rotary = rotary_arm_simulation()
     suspension = active_suspension_simulation()
     maglev = magnetic_levitation_simulation()
+    observer = magnetic_levitation_observer_simulation()
+    convergence = maglev_observer_convergence()
     tanks = two_tank_simulation()
 
     acceleration_reduction = 100.0 * (
         1.0 - suspension.active_acceleration_rms / suspension.passive_acceleration_rms
     )
     rotary_improvement = 100.0 * (1.0 - rotary.two_dof_rmse / rotary.feedback_only_rmse)
+    medium_step = convergence[-2]
+    fine_step = convergence[-1]
 
     return f"""# Reproducible results summary
 
@@ -62,7 +70,7 @@ The two-degree-of-freedom design combines model-based feedforward with feedback 
 
 The result quantifies ride-comfort improvement while exposing the required actuator effort.
 
-## Magnetic levitation
+## Magnetic levitation: local-model validation
 
 - Equilibrium current: `{maglev.equilibrium_current:.4f} A`
 - Equilibrium voltage: `{maglev.equilibrium_voltage:.4f} V`
@@ -72,6 +80,23 @@ The result quantifies ride-comfort improvement while exposing the required actua
 - Maximum applied voltage: `{maglev.maximum_voltage:.4f} V`
 
 The nonlinear comparison verifies that the local controller remains accurate for the selected 0.5 mm reference step.
+
+## Magnetic levitation: output-feedback observer
+
+- Measured states: gap and coil current
+- Estimated state: ball velocity
+- Observability rank: `{observer.design.observability_rank}`
+- Observer maximum pole real part: `{np.max(np.real(observer.design.observer_poles)):.4f} 1/s`
+- Full-state tracking RMSE: `{observer.full_state_tracking_rmse * 1000.0:.6f} mm`
+- Observer-based tracking RMSE: `{observer.observer_tracking_rmse * 1000.0:.6f} mm`
+- Position-estimation RMSE: `{observer.position_estimation_rmse * 1000.0:.6f} mm`
+- Velocity-estimation RMSE: `{observer.velocity_estimation_rmse:.8f} m/s`
+- Current-estimation RMSE: `{observer.current_estimation_rmse:.8f} A`
+- Maximum observer-control voltage: `{observer.maximum_voltage:.4f} V`
+- 0.1 ms versus 0.05 ms final-position difference: `{abs(medium_step.final_position - fine_step.final_position) * 1000.0:.6f} mm`
+- 0.1 ms versus 0.05 ms maximum-voltage difference: `{abs(medium_step.maximum_voltage - fine_step.maximum_voltage):.6f} V`
+
+The observer uses deterministic measurement noise with seed 42. The convergence study disables noise so integration-step effects are not confused with different random samples.
 
 ## Two-tank process
 

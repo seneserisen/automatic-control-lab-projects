@@ -1,13 +1,35 @@
 # Manual MATLAB validation checklist
 
-The Python reference layer passes automated linting and numerical tests. The MATLAB experiments must still be executed before the repository is described as MATLAB-validated.
+The repository now runs direct `matlab.unittest` checks in GitHub Actions and retains an independent Python validation layer. This checklist remains the final human review for complete demonstrations, figures and engineering interpretation.
+
+## Automated MATLAB gate
+
+Confirm on the latest commit:
+
+- [ ] `Validate MATLAB experiments` passed.
+- [ ] MATLAB utility tests passed.
+- [ ] Magnetic-levitation observer tests passed.
+- [ ] The JUnit artifact was generated.
+- [ ] No strict-mode warnings were reported.
 
 ## Environment
 
 - [ ] Record MATLAB release and operating system.
 - [ ] Clone the repository into a path without unusual characters.
 - [ ] Open MATLAB at the repository root.
-- [ ] Confirm `matlab/+control_lab/` is present.
+- [ ] Confirm `matlab/+control_lab/` and `matlab/tests/` are present.
+
+## Local tests
+
+```matlab
+results = runtests('matlab/tests', 'IncludeSubfolders', true);
+assertSuccess(results);
+```
+
+Verify:
+
+- [ ] All local MATLAB unit tests pass.
+- [ ] Local test results agree with CI.
 
 ## Full run
 
@@ -52,9 +74,15 @@ Verify:
 - [ ] Equilibrium current is approximately `2.001 A`.
 - [ ] Equilibrium voltage is approximately `22.012 V`.
 - [ ] The open-loop model contains an unstable pole.
-- [ ] Closed-loop poles are near `-20`, `-30`, and `-40`.
-- [ ] Linear and nonlinear 0.5 mm responses closely agree.
+- [ ] Controller poles are near `-20`, `-30`, and `-40`.
+- [ ] Observer poles are near `-80`, `-90`, and `-100`.
+- [ ] Observability rank is 3 using gap and current outputs.
+- [ ] Observer-based tracking reaches the 0.5 mm command.
+- [ ] Estimated velocity follows the true simulated velocity.
+- [ ] Position-estimation RMSE remains below 0.002 mm.
 - [ ] Total voltage remains between 0 V and 30 V.
+- [ ] Repeating the run with seed 42 reproduces the same trajectory.
+- [ ] The 0.1 ms and 0.05 ms convergence results closely agree.
 
 ### Two-tank system
 
@@ -67,4 +95,4 @@ Verify:
 
 ## Publication rule
 
-Only mark the repository as MATLAB-validated after completing this checklist and committing any required corrections. Record the MATLAB release and validation date in the README or a release note.
+After CI and this checklist pass, record the MATLAB release, operating system and validation date in a release note. Continue to describe all results as simulation results rather than hardware measurements.

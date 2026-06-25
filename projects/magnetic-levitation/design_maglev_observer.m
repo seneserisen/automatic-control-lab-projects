@@ -34,4 +34,5 @@ design.prefilter = prefilter;
 design.gain_source = gain_source;
 design.controller_poles = eig(closed_loop);
 design.observer_poles = eig(observer_matrix);
+design.observability_rank = model.observability_rank;
 end

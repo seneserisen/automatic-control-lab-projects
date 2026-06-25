@@ -7,6 +7,7 @@ from dataclasses import dataclass
 import numpy as np
 from numpy.typing import NDArray
 from scipy.signal import place_poles
+
 from validation.numerics import rk4_step, rms, validate_time_step
 
 FloatArray = NDArray[np.float64]

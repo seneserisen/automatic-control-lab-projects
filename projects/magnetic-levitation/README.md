@@ -140,4 +140,4 @@ These tests run in GitHub Actions through the official MathWorks actions.
 
 ## Preview
 
-![Magnetic Levitation observer results](figures/magnetic_levitation_results.svg)
+![Magnetic Levitation observer results](figures/magnetic_levitation_observer_results.svg)

@@ -7,7 +7,6 @@ from dataclasses import dataclass
 import numpy as np
 from numpy.typing import NDArray
 from scipy.signal import place_poles
-
 from validation.numerics import rk4_step, rms, validate_time_step
 
 FloatArray = NDArray[np.float64]
@@ -119,7 +118,6 @@ def magnetic_levitation_observer_simulation(
     design = maglev_design()
     mass, gravity, magnetic_coefficient = 0.068, 9.81, 6.53e-5
     resistance, inductance = 11.0, 0.4125
-    gap = design.equilibrium_state[0]
 
     time = np.arange(0.0, 0.5 + 0.5 * dt, dt)
     reference = np.zeros_like(time)

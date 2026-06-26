@@ -26,5 +26,8 @@ jobs:
       - name: Run CTest
         run: ctest --test-dir build/c --output-on-failure
 
-      - name: Run reference demo
+      - name: Run magnetic-levitation demo
         run: ./build/c/maglev_observer_demo
+
+      - name: Run two-tank anti-windup demo
+        run: ./build/c/two_tank_demo

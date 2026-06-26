@@ -14,7 +14,7 @@ A control-engineering portfolio covering nonlinear systems, state-space control,
 | [Elastically mounted rotary arm](projects/rotary-arm/) | Fifth-order trajectory, feedback, feedforward, 2-DOF control, load disturbance | 2-DOF tracking RMSE is about 70% lower |
 | [Quarter-car active suspension](projects/active-suspension/) | State-space modelling, LQR, road disturbance, actuator saturation | RMS body acceleration is reduced by about 35% |
 | [Magnetic levitation](projects/magnetic-levitation/) | Nonlinear plant, pole placement, Luenberger observer, sensor noise, convergence study, portable C runtime | Position-estimation RMSE is below 0.001 mm |
-| [Two-tank process](projects/two-tank-system/) | Nonlinear hydraulics, PI control, saturation, anti-windup | Recovery improves from about 429 s to 312 s |
+| [Two-tank process](projects/two-tank-system/) | Nonlinear hydraulics, PI control, saturation, back-calculation, portable C runtime | Recovery improves from about 429 s to 312 s |
 
 Detailed numerical results are generated from executable models and published in [docs/results-summary.md](docs/results-summary.md).
 
@@ -36,7 +36,8 @@ Detailed numerical results are generated from executable models and published in
 - Actuator saturation and control-effort analysis
 - Fourth-order Runge-Kutta integration and convergence studies
 - Deterministic sensor-noise scenarios
-- Portable C99 runtime with fixed-size memory
+- Portable C99 observer and PI-control runtimes
+- Fixed-size state storage without dynamic allocation
 - CMake, CTest, GCC, Clang, and strict compiler warnings
 - Direct MATLAB and multi-version Python CI
 
@@ -48,7 +49,7 @@ matlab/+control_lab/       Shared MATLAB numerical and metrics utilities
 matlab/tests/              Direct matlab.unittest verification
 validation/                Independent numerical reference models and reports
 tests/                     Python numerical and behaviour tests
-c/                         Portable C99 controller and observer runtime
+c/                         Portable C99 control runtimes
 c/tests/                   CTest-based runtime verification
 docs/                      Architecture, results, and requirements traceability
 .github/workflows/         MATLAB, Python, and C CI workflows
@@ -64,12 +65,6 @@ See [docs/architecture.md](docs/architecture.md) and [docs/verification-matrix.m
 run_all
 ```
 
-Run the magnetic-levitation observer experiment:
-
-```matlab
-run('projects/magnetic-levitation/magnetic_levitation_demo.m')
-```
-
 Run MATLAB tests:
 
 ```matlab
@@ -77,13 +72,14 @@ results = runtests('matlab/tests', 'IncludeSubfolders', true);
 assertSuccess(results);
 ```
 
-### Portable C runtime
+### Portable C runtimes
 
 ```bash
 cmake -S c -B build/c -DCMAKE_BUILD_TYPE=Release
 cmake --build build/c --parallel
 ctest --test-dir build/c --output-on-failure
 ./build/c/maglev_observer_demo
+./build/c/two_tank_demo
 ```
 
 ### Python validation
@@ -103,8 +99,8 @@ python -m validation.report --check
 
 - MATLAB R2024b executes direct `matlab.unittest` tests.
 - Python 3.10–3.12 executes numerical regression and report-freshness checks.
-- GCC and Clang compile the C99 runtime with warnings treated as errors.
-- CTest verifies configuration handling, tracking, saturation, determinism, and convergence.
+- GCC and Clang compile both C99 runtimes with warnings treated as errors.
+- CTest verifies configuration handling, tracking, saturation, anti-windup behaviour, determinism, and convergence.
 - Requirements and automated evidence are linked in [docs/verification-matrix.md](docs/verification-matrix.md).
 
 ## Limitations

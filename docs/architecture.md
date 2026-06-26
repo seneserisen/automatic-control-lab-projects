@@ -10,7 +10,7 @@ matlab/+control_lab/       Shared MATLAB numerical and metrics utilities
 matlab/tests/              Direct MATLAB unit tests
 validation/                Numerical reference models and generated reports
 tests/                     Python regression and behaviour tests
-c/                         Portable C99 controller and observer runtime
+c/                         Portable C99 control runtimes
 c/tests/                   CTest-based runtime tests
 docs/                      Architecture, results, and requirements traceability
 .github/workflows/         MATLAB, Python, and C CI workflows
@@ -65,6 +65,19 @@ reference ──► state-feedback controller ──► voltage saturation ─�
 
 The nonlinear plant is controlled using the estimated local-deviation state. A separate full-state nonlinear simulation provides the comparison baseline.
 
+## Two-tank anti-windup controller
+
+The two-tank runtime executes a PI controller with optional back-calculation:
+
+```text
+reference ──► PI controller ──► pump saturation ──► nonlinear two-tank plant
+                    ▲                 │                       │
+                    │                 └── anti-windup ───────┘
+                    └──────────── tank-2 level feedback
+```
+
+The runtime starts from hydraulic equilibrium, commands a reference above the pump-supported steady-state level, measures sustained recovery, and applies a later inlet-flow disturbance.
+
 ## Numerical validation
 
 `validation/reference_models.py` contains deterministic reference implementations for the five experiments.
@@ -73,19 +86,33 @@ The nonlinear plant is controlled using the estimated local-deviation state. A s
 
 `validation/report.py` generates `docs/results-summary.md`. CI fails when the committed report no longer matches the executable models.
 
-## Portable C runtime
+## Portable C runtimes
 
-The `c/` directory contains the magnetic-levitation observer runtime:
+The `c/` directory contains two C99 implementations.
 
-- public C99 configuration and metrics API;
+### Magnetic levitation
+
 - nonlinear plant equations;
 - precomputed controller and observer gains;
-- fixed-step RK4 integration;
 - deterministic sensor-noise support;
 - voltage saturation;
-- online metrics;
+- online tracking and estimation metrics.
+
+### Two-tank process
+
+- nonlinear Torricelli-flow equations;
+- PI control and back-calculation;
+- pump saturation;
+- disturbance injection;
+- online recovery, saturation, and integrator metrics.
+
+Both runtimes use:
+
+- public configuration and metrics APIs;
+- fixed-step RK4 integration;
 - fixed-size memory without dynamic allocation;
-- CMake and CTest configuration.
+- input validation;
+- CMake and CTest.
 
 ## Continuous integration
 
@@ -110,7 +137,7 @@ The `c/` directory contains the magnetic-levitation observer runtime:
 - `-Wall -Wextra -Wpedantic -Werror`
 - CMake build
 - CTest runtime checks
-- reference demo execution
+- both reference demos executed
 
 ## Test boundaries
 
@@ -125,7 +152,8 @@ Automated tests verify:
 - deterministic seeded execution;
 - fixed-step convergence;
 - C configuration validation;
-- anti-windup recovery;
+- hydraulic equilibrium and pump reachability;
+- anti-windup recovery and integrator limiting;
 - RK4 and metric utilities.
 
 They do not establish hardware safety, real-time schedulability, fixed-point correctness, MISRA-C compliance, or robustness outside the tested parameter ranges.
